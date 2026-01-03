@@ -1,3 +1,14 @@
+# Next.js + TypeScript + PostgreSQL + Prisma
+
+- Node.js
+- TypeScript
+- Next.js (App Router, backend-first)
+- PostgreSQL
+- Prisma ORM
+- Clean Architecture / Modular Architecture
+- RBAC (Role-Based Access Control)
+- Sistemas de stock y ventas
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +45,76 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# DB postgres con Docker
+ ```bash
+configurar .env
+configurar docker-compose.yml
+ ```
+# Iniciar los servicios
+Ejecuta el siguiente comando en la terminal desde el directorio donde están tus archivos: 
+
+ ```bash
+docker-compose up -d
+ ```
+
+## Uso con docker run (Alternativa)
+Si prefieres usar docker run, puedes pasar el archivo .env completo usando la bandera --env-file. 
+
+```bash
+docker run --name postgres_container \
+-p 5432:5432 \
+--env-file .env \
+-v postgres_data:/var/lib/postgresql/data \
+-d postgres:16
+```
+# PRISMA CONFIGURATION
+warn Prisma would have added DATABASE_URL but it already exists in .env.
+warn You already have a .gitignore file. Don't forget to add .env in it to not commit any private information.
+
+Next, choose how you want to set up your database:
+
+CONNECT EXISTING DATABASE:
+  1. Configure your DATABASE_URL in prisma.config.ts
+  2. Run prisma db pull to introspect your database.
+
+CREATE NEW DATABASE:
+  Local: npx prisma dev (runs Postgres locally in your terminal)
+  Cloud: npx create-db (creates a free Prisma Postgres database)
+
+Then, define your models in prisma/schema.prisma and run prisma migrate dev to apply your schema.
+
+Learn more: https://pris.ly/getting-started
+
+# DBeaver - Solutions in DBeaver
+
+### 1- Connection-Specific Setting (Recommended for this issue):
+- Edit your PostgreSQL connection in DBeaver.
+- Go to the Advanced tab (or Metadata -> Global Settings in newer versions).
+- Find and enable "Replace legacy time zone" or manually set the timezone for the connection.
+- Try setting it to a standard value like UTC or America/Argentina/Buenos_Aires if supported by your PostgreSQL version.
+
+### 2- DBeaver Preferences (Global):
+
+- Go to Window > Preferences > User Interface.
+- Change the Timezone setting to a supported value (e.g., UTC, America/Argentina/Buenos_Aires).
+
+### una vez hecha la migracion
+
+npx prisma migrate dev --name init
+
+npx prisma generate //ejecutar tmbn esta linea
+
+```code
+//prisma.ts
+import { PrismaClient } from '../generated/prisma'; //configurar este import que esta configurado en schema.prisma
+
+```
+
+```code
+//schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+```

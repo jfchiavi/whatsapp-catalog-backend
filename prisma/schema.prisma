@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  //url      = env("DATABASE_URL") error: The datasource property `url` is no longer supported
+}
+
+enum Role {
+  SUPER_ADMIN
+  BRANCH_MANAGER
+  SELLER
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role
+  branchId   String?
+  branch     Branch?  @relation(fields: [branchId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  sales         Sale[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Branch {
+  id        String   @id @default(uuid())
+  name      String
+  type      String   // physical | virtual
+  createdAt DateTime @default(now())
+
+  users User[]
+  stock Stock[]
+  sales Sale[]
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  sku       String   @unique
+  name      String
+  price     Float
+  cost      Float
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stock Stock[]
+  saleItems SaleItem[]
+}
+
+model Stock {
+  id        String   @id @default(uuid())
+  productId String
+  branchId  String
+  quantity  Int
+
+  product Product @relation(fields: [productId], references: [id])
+  branch  Branch  @relation(fields: [branchId], references: [id])
+
+  @@unique([productId, branchId])
+}
+
+model StockMovement {
+  id        String   @id @default(uuid())
+  productId String
+  fromBranchId String?
+  toBranchId   String?
+  quantity  Int
+  type      String   // ADJUST | TRANSFER | SALE
+  createdAt DateTime @default(now())
+}
+
+model Sale {
+  id        String   @id @default(uuid())
+  branchId  String
+  userId    String
+  total     Float
+  createdAt DateTime @default(now())
+
+  branch Branch @relation(fields: [branchId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  items  SaleItem[]
+}
+
+model SaleItem {
+  id        String   @id @default(uuid())
+  saleId   String
+  productId String
+  quantity Int
+  price    Float
+
+  sale    Sale    @relation(fields: [saleId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model WhatsappOrder {
+  id            String   @id @default(uuid())
+  customerName  String
+  customerPhone String
+  message       String
+  status        String   // pending | processing | completed
+  total         Float
+  createdAt     DateTime @default(now())
+}

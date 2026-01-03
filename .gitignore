@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma Client generation (if not in node_modules)
+# Check your schema.prisma 'output' path
+# For default location, node_modules/.prisma is often implicitly ignored
+# If you have a custom output, e.g., in 'src/generated', ignore it:
+
+/src/generated/prisma
+
+# Keep Prisma migration files in source control
+# Do not ignore prisma/migrations
