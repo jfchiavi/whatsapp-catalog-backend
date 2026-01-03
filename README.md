@@ -191,12 +191,21 @@ tener:
 - El stock se maneja en otro módulo (no acá)
 
 ### 🟢 Paso 6: Stock (multi-sucursal + transacciones)
-
+🎯 Objetivo
 El paso más delicado:
 
-- Stock por sucursal
-- Ajustes
-- Transferencias
-- Historial
-- Transacciones PostgreSQL
+- Stock por producto y sucursal
+- Ajustes manuales
+- Transferencias entre sucursales
+- Historial de movimientos
+- Transacciones atomicas PostgreSQL
+- enpoints seguros
 - Prevención de inconsistencias
+
+🧠 Reglas de negocio (obligatorias)
+
+1. El stock NUNCA puede quedar negativo
+2. Toda modificación genera un StockMovement
+3. Las transferencias son atómicas
+4. El stock no se elimina, solo se ajusta
+5. Ventas y stock comparten lógica (reutilizable)
