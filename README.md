@@ -118,3 +118,85 @@ generator client {
   output   = "../src/generated/prisma"
 }
 ```
+### 🟢 3 — Autenticación + JWT + RBAC
+🎯 Objetivo
+tener:
+```
+✔ Login con email + password
+✔ Passwords hasheadas
+✔ JWT Access Token
+✔ Refresh Token persistido
+✔ Middleware de autenticación
+✔ Middleware de permisos (RBAC)
+✔ Endpoint /api/auth/me
+```
+👉 Sin lógica duplicada
+👉 Sin auth “trucha”
+
+🧠 Decisiones de arquitectura (importante)
+
+#### Access Token
+- Vida corta (15 min)
+- Se usa en cada request
+#### Refresh Token
+- Vida larga (7–30 días)
+- Guardado en DB
+- Permite renovar sesión
+#### RBAC
+- Permisos definidos por rol
+- Middleware reusable
+- El controller NO decide permisos
+
+### 🟢 PASO 4 — Usuarios + Sucursales
+🎯 Objetivo del paso 4
+tener:
+```
+✔ CRUD de usuarios
+✔ CRUD de sucursales
+✔ Asignación usuario ↔ sucursal
+✔ Guards por rol y permisos
+✔ Separación controller / service / repo
+✔ Endpoints listos para React Query
+```
+🧠 Reglas de negocio (claras desde ahora)
+#### Usuarios
+
+- Solo SUPER_ADMIN puede crear y eliminar usuarios
+- BRANCH_MANAGER solo puede ver usuarios de su sucursal
+- Password siempre hasheada
+- Email único
+
+#### Sucursales
+
+- Solo SUPER_ADMIN puede crear/editar
+- Usuarios normales solo leen
+- Incluye sucursal virtual (type = "virtual")
+
+### 🟢 PASO 5 — Productos
+🎯 Objetivo del paso 5
+tener:
+```
+✔ CRUD completo de productos
+✔ Activar / desactivar productos
+✔ Validaciones fuertes
+✔ Guards por permisos
+✔ Código alineado con React Query
+✔ Base perfecta para Stock (Paso 6)
+```
+🧠 Reglas de negocio
+
+- Solo usuarios con permiso products
+- SKU único
+- Un producto inactivo no puede venderse
+- El stock se maneja en otro módulo (no acá)
+
+### 🟢 Paso 6: Stock (multi-sucursal + transacciones)
+
+El paso más delicado:
+
+- Stock por sucursal
+- Ajustes
+- Transferencias
+- Historial
+- Transacciones PostgreSQL
+- Prevención de inconsistencias
