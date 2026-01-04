@@ -271,3 +271,37 @@ SQL-first, eficiente y alineado con React Query + dashboard.
 ✅ Queries explícitas
 ✅ Performance > abstracción
 ✅ Tipos claros
+
+### 🟢 PASO 10 — Hardening + Producción
+🎯 Objetivo del paso 10
+Hardening + Producción, el paso que diferencia un backend “que funciona” de uno listo para producción real.
+Acá cerramos:
+seguridad
+consistencia
+DX
+preparación para deploy
+
+Al finalizar este paso vas a tener:
+
+✔ Logout real
+✔ Revocación de refresh tokens
+✔ Manejo global de errores
+✔ Seguridad mínima obligatoria
+✔ Convenciones finales
+✔ Checklist de producción
+
+```js
+//Uso de Errores en los servicios
+throw new AppError('Insufficient stock', 400);
+
+```
+
+### Seguridad mínima obligatoria
+🔐 Reglas aplicadas
+
+✔ JWT con expiración
+✔ Passwords hasheadas
+✔ Refresh tokens revocables
+✔ RBAC
+✔ Validaciones Zod
+✔ Transacciones DB
