@@ -251,3 +251,23 @@ Estados válidos:
 - processing
 - completed
 Un pedido convertido no puede reconvertirse
+
+### 🟢 Paso 9: Reportes
+PASO 9: Reportes, el último módulo funcional grande del sistema.
+Acá convertimos datos en información para tomar decisiones.
+SQL-first, eficiente y alineado con React Query + dashboard.
+
+✔ Ventas por período
+✔ Productos más vendidos
+✔ Valorización de inventario
+✔ Comparativa por sucursal
+✔ Queries eficientes (aggregations reales)
+✔ Endpoints listos para gráficos
+
+🧠 Principios clave para reportes
+
+❌ No lógica en controllers
+✅ SQL agregado (no loops en JS)
+✅ Queries explícitas
+✅ Performance > abstracción
+✅ Tipos claros
