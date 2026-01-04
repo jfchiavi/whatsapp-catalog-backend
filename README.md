@@ -230,3 +230,24 @@ El stock se descuenta en la misma transacción
 No se permite vender productos inactivos
 No se permite stock negativo
 El total se calcula en backend
+
+### 🟢 8 — Pedidos WhatsApp
+🎯 Objetivo del paso 8
+tener:
+
+✔ Registro de pedidos desde WhatsApp
+✔ Estados del pedido
+✔ Listado para operadores
+✔ Conversión directa a venta
+✔ Integración con stock y ventas
+✔ Preparado para automatización futura
+
+🧠 Reglas de negocio
+
+Pedido WhatsApp NO descuenta stock
+Solo al convertir a venta se descuenta
+Estados válidos:
+- pending
+- processing
+- completed
+Un pedido convertido no puede reconvertirse
