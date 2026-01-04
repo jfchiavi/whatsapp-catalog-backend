@@ -147,7 +147,7 @@ tener:
 - Middleware reusable
 - El controller NO decide permisos
 
-### 🟢 PASO 4 — Usuarios + Sucursales
+### 🟢 4 — Usuarios + Sucursales
 🎯 Objetivo del paso 4
 tener:
 ```
@@ -172,7 +172,7 @@ tener:
 - Usuarios normales solo leen
 - Incluye sucursal virtual (type = "virtual")
 
-### 🟢 PASO 5 — Productos
+### 🟢 5 — Productos
 🎯 Objetivo del paso 5
 tener:
 ```
@@ -190,7 +190,7 @@ tener:
 - Un producto inactivo no puede venderse
 - El stock se maneja en otro módulo (no acá)
 
-### 🟢 Paso 6: Stock (multi-sucursal + transacciones)
+### 🟢 6: Stock (multi-sucursal + transacciones)
 🎯 Objetivo
 El paso más delicado:
 
@@ -209,3 +209,24 @@ El paso más delicado:
 3. Las transferencias son atómicas
 4. El stock no se elimina, solo se ajusta
 5. Ventas y stock comparten lógica (reutilizable)
+
+### 🟢 7 — Ventas (Sales)
+🎯 Objetivo del paso 7
+tener:
+
+✔ Creación de ventas
+✔ Descuento automático de stock
+✔ Transacciones atómicas
+✔ Detalle de ítems vendidos
+✔ Ventas por sucursal
+✔ Endpoints listos para reportes
+
+🧠 Reglas de negocio
+
+Una venta SIEMPRE:
+pertenece a una sucursal
+la realiza un usuario
+El stock se descuenta en la misma transacción
+No se permite vender productos inactivos
+No se permite stock negativo
+El total se calcula en backend
