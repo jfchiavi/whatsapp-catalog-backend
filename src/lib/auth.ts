@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 //import { Role } from '@prisma/client';
-import { Role } from '../generated/prisma';
+import { Role } from '@prisma/client';
 
-const ACCESS_TOKEN_EXPIRES = '15m';
+const ACCESS_TOKEN_EXPIRES = '60m';
 const REFRESH_TOKEN_EXPIRES = '7d';
 
 export const hashPassword = async (password: string) => {

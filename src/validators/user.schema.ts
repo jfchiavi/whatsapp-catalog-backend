@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role } from '../generated/prisma';
+import { Role } from '@prisma/client';
 
 export const createUserSchema = z.object({
   name: z.string().min(2),

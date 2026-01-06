@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/auth';
-import { Role } from '../../generated/prisma';
+import { Role } from '@prisma/client';
 
 export const createUser = async (data: {
   name: string;

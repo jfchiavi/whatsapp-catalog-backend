@@ -7,6 +7,13 @@ export const getStockByProduct = async (productId: string) => {
   });
 };
 
+export const getSockByBranch = async (branchId: string) => {
+  return prisma.stock.findMany({
+    where: { branchId },
+    include: { product: true },
+  });
+};
+
 export const adjustStock = async (
   productId: string,
   branchId: string,

@@ -100,24 +100,58 @@ Learn more: https://pris.ly/getting-started
 - Change the Timezone setting to a supported value (e.g., UTC, America/Argentina/Buenos_Aires).
 
 ### una vez hecha la migracion
-
+```bash
 npx prisma migrate dev --name init
 
 npx prisma generate //ejecutar tmbn esta linea
+```
+### IMPORTANTE: USAR Prisma V5 ya que V6 y V7 no son compatibles con esta arquitectura
+El error:
+The datasource property `url` is no longer supported in schema files
+significa que:
 
-```code
+👉 Tenés instalada una versión NUEVA de Prisma (v6 o v7)
+👉 Prisma ahora EMPUJA driver adapters / accelerate / edge
+👉 Prisma YA NO quiere el url en schema.prisma
+
+⚠️ PERO
+Ese nuevo modelo NO ES COMPATIBLE con:
+- ERP / Stock
+- Transacciones complejas
+- Prisma clásico
+- Next.js backend Node.js tradicional
+
+👉 Prisma está forzando una arquitectura que NO te conviene.
+
+```ts
 //prisma.ts
-import { PrismaClient } from '../generated/prisma'; //configurar este import que esta configurado en schema.prisma
+import { PrismaClient } from '@prisma/client';
 
 ```
 
-```code
+```prisma
 //schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 ```
+
+# Regenerar Prisma desde cero
+Abrí la carpeta del proyecto
+Click derecho → “Git Bash Here”
+y ejecuta: rm -rf node_modules .prisma
+```bash
+rm -rf node_modules .prisma
+npm install
+npx prisma generate
+
+```
+
 ### 🟢 3 — Autenticación + JWT + RBAC
 🎯 Objetivo
 tener:
