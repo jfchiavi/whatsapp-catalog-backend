@@ -7,6 +7,15 @@ import {
 } from '@/lib/auth';
 import { loginSchema } from '@/validators/auth.schema';
 
+  export interface UserResponse {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    branchId: string | null;
+    tenantId: string | null;
+  };
+
 export async function POST(req: Request) {
   const body = await req.json();
   const parsed = loginSchema.safeParse(body);
@@ -51,8 +60,22 @@ export async function POST(req: Request) {
     },
   });
 
+const userResponse = generateUserResponse(user);
+
   return NextResponse.json({
     accessToken,
     refreshToken,
+    userResponse,
   });
+}
+
+function generateUserResponse(user: any): UserResponse {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    branchId: user.branchId, //if branchId is null, is Admin
+    tenantId: user.tenantId,
+  };
 }
