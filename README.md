@@ -339,3 +339,13 @@ throw new AppError('Insufficient stock', 400);
 ✔ RBAC
 ✔ Validaciones Zod
 ✔ Transacciones DB
+
+
+## CORS: 
+agregar CORS en el backend Next.js (App Router) de forma correcta y profesional, compatible con:
+```ts
+- JWT
+- Refresh token
+- Cookies (si después migrás a httpOnly)
+- Frontend en otro dominio/puerto (Vite, localhost:5173, etc.)
+```
