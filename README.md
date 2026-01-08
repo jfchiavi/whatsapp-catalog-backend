@@ -349,3 +349,20 @@ agregar CORS en el backend Next.js (App Router) de forma correcta y profesional,
 - Cookies (si después migrás a httpOnly)
 - Frontend en otro dominio/puerto (Vite, localhost:5173, etc.)
 ```
+## en produccion (Muy Importante)
+- NO usar *
+- NO permitir cualquie origen
+```ts
+const ALLOWED_ORIGINS = [
+  'https://app.midominio.com',
+];
+```
+y Si usamos Cookies:
+```ts
+res.headers.set(
+  'Access-Control-Allow-Origin',
+  'https://app.midominio.com'
+);
+res.headers.set('Access-Control-Allow-Credentials', 'true');
+
+```
