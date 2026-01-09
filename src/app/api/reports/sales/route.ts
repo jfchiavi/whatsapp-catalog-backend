@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import { permissionMiddleware } from '@/middlewares/permission.middleware';
 import { getSalesReport } from '@/modules/reports/report.service';
+import { handleError } from '@/lib/errors';
 
 export async function GET(req: NextRequest) {
   const auth = authMiddleware(req);
@@ -19,7 +20,11 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+  try {
+    const report = await getSalesReport(from, to);
+    return NextResponse.json(report);
+  } catch (error) {
+    handleError(error);
+  }
 
-  const report = await getSalesReport(from, to);
-  return NextResponse.json(report);
 }

@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import { permissionMiddleware } from '@/middlewares/permission.middleware';
-import {
-  updateProductSchema,
-} from '@/validators/product.schema';
-import {
-  getProductById,
-  updateProduct,
-  deleteProduct,
-} from '@/modules/products/product.service';
+import { updateProductSchema } from '@/validators/product.schema';
+import { getProductById, updateProduct, deleteProduct } from '@/modules/products/product.service';
+import { AppError, handleError } from '@/lib/errors';
+
 
 export async function GET(
   req: NextRequest,
@@ -19,8 +15,12 @@ export async function GET(
 
   permissionMiddleware(auth.role, 'products');
 
-  const product = await getProductById(params.id);
-  return NextResponse.json(product);
+  try {
+    const product = await getProductById(params.id);
+    return NextResponse.json(product);
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
 export async function PUT(
@@ -28,19 +28,24 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const auth = authMiddleware(req);
-  if (auth instanceof NextResponse) return auth;
-
+  if (auth instanceof NextResponse) 
+    return auth;
   permissionMiddleware(auth.role, 'products');
+  try {
+      const body = await req.json();
+      const parsed = updateProductSchema.safeParse(body);
+      const parameter = await params;
 
-  const body = await req.json();
-  const parsed = updateProductSchema.safeParse(body);
+      if (!parsed.success) {
+        const nerror = new AppError(parsed.error.message, 400);
+        return handleError(nerror);
+      }
 
-  if (!parsed.success) {
-    return NextResponse.json(parsed.error, { status: 400 });
+      const product = await updateProduct(parameter.id, parsed.data);
+      return NextResponse.json(product);
+  } catch (error) {
+    handleError(error);
   }
-
-  const product = await updateProduct(params.id, parsed.data);
-  return NextResponse.json(product);
 }
 
 export async function DELETE(
@@ -48,10 +53,22 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const auth = authMiddleware(req);
-  if (auth instanceof NextResponse) return auth;
+
+  if (auth instanceof NextResponse) 
+    return auth;
 
   permissionMiddleware(auth.role, 'products');
 
-  await deleteProduct(params.id);
-  return NextResponse.json(null, { status: 204 });
+  try {    
+    const parameter = await params;
+
+    await deleteProduct(parameter.id);
+
+    return NextResponse.json(
+      { message: 'Product deleted successfully' }, 
+      { status: 200 });
+
+  } catch (error) {
+      return handleError(error);
+  }
 }

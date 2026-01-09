@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import { permissionMiddleware } from '@/middlewares/permission.middleware';
 import { createBranchSchema } from '@/validators/branch.schema';
+import { handleError } from '@/lib/errors';
 import {
   createBranch,
   getBranches,
@@ -35,6 +36,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(parsed.error, { status: 400 });
   }
 
-  const branch = await createBranch(parsed.data);
-  return NextResponse.json(branch, { status: 201 });
+  try {
+    const branch = await createBranch(parsed.data);
+    return NextResponse.json(branch, { status: 201 });    
+  } catch (error) {
+    return handleError(error);
+  }
 }

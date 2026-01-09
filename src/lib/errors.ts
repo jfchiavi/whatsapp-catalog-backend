@@ -1,3 +1,5 @@
+import { NextResponse } from "next/dist/server/web/spec-extension/response";
+
 export class AppError extends Error {
   statusCode: number;
 
@@ -9,14 +11,14 @@ export class AppError extends Error {
 
 export const handleError = (error: any) => {
   if (error instanceof AppError) {
-    return {
-      message: error.message,
-      status: error.statusCode,
-    };
+    return NextResponse.json(
+      { message: error.message }, 
+      { status: error.statusCode }
+    );
   }
 
-  return {
-    message: 'Internal server error',
-    status: 500,
-  };
+  return NextResponse.json(
+    { message: 'Internal server error' },
+    { status: 500 }
+  );
 };
