@@ -13,6 +13,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const from = searchParams.get('from');
   const to = searchParams.get('to');
+  const fromDate = new Date(`${from}`);
+  const toDate = new Date(`${to}`);
 
   if (!from || !to) {
     return NextResponse.json(
@@ -21,10 +23,11 @@ export async function GET(req: NextRequest) {
     );
   }
   try {
-    const report = await getSalesReport(from, to);
+    const report = await getSalesReport(fromDate, toDate);
     return NextResponse.json(report);
   } catch (error) {
-    handleError(error);
+    console.error('REPORT SALES ERROR', error);
+    return handleError(error);
   }
 
 }

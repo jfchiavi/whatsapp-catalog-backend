@@ -44,7 +44,7 @@ export async function PUT(
       const product = await updateProduct(parameter.id, parsed.data);
       return NextResponse.json(product);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }
 

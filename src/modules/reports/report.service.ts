@@ -10,8 +10,8 @@ import {
  * Ventas por período
  */
 export const getSalesReport = async (
-  from: string,
-  to: string
+  from: Date,
+  to: Date
 ): Promise<SalesReportItem[]> => {
   return prisma.$queryRaw<SalesReportItem[]>`
     SELECT
