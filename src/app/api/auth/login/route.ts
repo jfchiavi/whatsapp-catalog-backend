@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       { status: 401 }
     );
   }
-
+  console.log('BACK: User found:', user);
   const isValid = await comparePassword(password, user.password);
 
   if (!isValid) {

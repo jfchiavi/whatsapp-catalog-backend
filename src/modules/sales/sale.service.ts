@@ -1,5 +1,25 @@
 import { prisma } from '@/lib/prisma';
 
+export async function getSales(branchId?: string) {
+  return prisma.sale.findMany({
+    where: {
+      branchId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      branch: true,
+      user: true,
+      items: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+}
+
 export const createSale = async (
   userId: string,
   branchId: string,
